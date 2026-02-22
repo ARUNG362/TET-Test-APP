@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ta">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test</title>
+        <link rel="stylesheet" href="test.css">
+    </head>
+
+    <body>
+        <div id="snackbar"></div>
+        <div class="loader-wrapper" id="loader">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <div class="progress" id="progressText"></div>
+                <div class="question" id="questionText"></div>
+                <div id="optionsContainer"></div>
+
+                <div class="nav-buttons">
+                    <button id="prevBtn" onclick="prevQuestion()">Previous</button>
+                    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+                    <button id="submitBtn" onclick="submitTest()" style="display:none;">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="test.js" ></script> 
+
+    </body>
+
+</html>
