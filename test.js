@@ -139,7 +139,7 @@ function submitTest() {
   );
 
   fetch(
-    `${API_URL}?sheet=Test Results&operation=add-result`,
+    `${API_URL}?sheet=Test%20DResults&operation=add-result`,
     {
         method: 'POST',
         body: JSON.stringify(resultData)
