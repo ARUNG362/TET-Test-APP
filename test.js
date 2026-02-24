@@ -101,6 +101,11 @@ function updateNavigationButtons() {
 
 function submitTest() {
   let score = 0;
+  const incorrectContainer = document.getElementById("incorrectList");
+  const reviewSection = document.getElementById("reviewSection");
+  
+  incorrectContainer.innerHTML = "";
+  reviewSection.style.display = "none";
 
   console.log(userAnswers)
   let anwersSubmitted = userAnswers.filter(ans => ans !== null);
@@ -115,8 +120,27 @@ function submitTest() {
 
 
   questions.forEach((q, index) => {
-    if (userAnswers[index] === q.answer) {
+    const correctAnswerIndex = q.answer;
+    const userAnswerIndex = userAnswers[index];
+    if (userAnswerIndex === correctAnswerIndex) {
       score++;
+    } else {
+      // Show incorrect question
+      const div = document.createElement("div");
+      div.className = "review-item";
+
+      const correctText = q["option_" + correctAnswerIndex];
+      const userText = userAnswerIndex 
+        ? q["option_" + userAnswerIndex]
+        : "Not Answered";
+
+      div.innerHTML = `
+        <p><strong>Question ${index + 1}:</strong> ${q.question}</p>
+        <p class="user-answer">Your Answer: ${userText}</p>
+        <p class="correct-answer">Correct Answer: ${correctText}</p>
+      `;
+
+      incorrectContainer.appendChild(div);
     }
   });
 
@@ -133,11 +157,16 @@ function submitTest() {
 
   console.log(resultData); // Ready to send to your API
 
+  if (incorrectContainer.children.length > 0) {
+    reviewSection.style.display = "block";
+  }
+
   showSnackbar(
     `Test Completed! Score: ${score}/${total} — ${resultStatus}`,
     resultStatus === "PASS",
   );
 
+  document.getElementById("submitBtn").disabled = true;
   fetch(
     `${API_URL}?sheet=Test%20DResults&operation=add-result`,
     {
@@ -158,7 +187,7 @@ function showSnackbar(message, isPass) {
 
   setTimeout(() => {
     snackbar.className = snackbar.className.replace("show", "");
-  }, 3000);
+  }, 5000);
 }
 
 loadQuestions();
