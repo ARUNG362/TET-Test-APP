@@ -17,10 +17,12 @@ function hideLoader() {
 
 async function loadQuestions() {
   try {
-    const testId = sessionStorage.getItem("testId");
+    const testData = JSON.parse(sessionStorage.getItem("testData"));
+    const testId = testData['test_id'];
+    const sheetName = testData['question_sheet'];
     showLoader();
     const response = await fetch(
-      `${API_URL}?sheet=Test%20Data&operation=get-test-data&testId=${testId}`,
+      `${API_URL}?sheet=${sheetName}&operation=get-test-data&testId=${testId}`,
     );
     const result = await response.json();
 
@@ -73,7 +75,6 @@ function selectAnswer(optionNumber) {
 }
 
 function nextQuestion() {
-  console.log(userAnswers);
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     renderQuestion();
@@ -107,7 +108,6 @@ function submitTest() {
   incorrectContainer.innerHTML = "";
   reviewSection.style.display = "none";
 
-  console.log(userAnswers)
   let anwersSubmitted = userAnswers.filter(ans => ans !== null);
   
   if(questions.length !== anwersSubmitted.length){
@@ -154,8 +154,6 @@ function submitTest() {
     total_marks: total,
     result: resultStatus,
   };
-
-  console.log(resultData); // Ready to send to your API
 
   if (incorrectContainer.children.length > 0) {
     reviewSection.style.display = "block";

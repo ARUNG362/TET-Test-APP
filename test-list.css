@@ -64,6 +64,30 @@ body {
     margin-top: 8px;
 }
 
+
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pass {
+  background-color: #e6f7ec;
+  color: #755f50;
+}
+
+.fail {
+  background-color: #fde8e8;
+  color: #810f07;
+}
+
 /* ===== Spinner Styles ===== */
 .loader-wrapper {
     position: fixed;
