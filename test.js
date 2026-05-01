@@ -67,6 +67,7 @@ function renderQuestion() {
   }
 
   updateNavigationButtons();
+  document.getElementById("nextBtn").disabled = !userAnswers[currentIndex];
 }
 
 function selectAnswer(optionNumber) {

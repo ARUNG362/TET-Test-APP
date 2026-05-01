@@ -11,6 +11,7 @@ function hideLoader() {
 }
 
 let allTests = [];
+let scoresData = [];
 
 async function loadTests() {
   try {
@@ -25,13 +26,49 @@ async function loadTests() {
 
     const scoreResponse = await fetch(`${API_URL}?sheet=Test Results&operation=get-tests`);
     const scores = await scoreResponse.json();
-
-    renderTests(result.data, scores.data);
+    allTests = result.data;
+    scoresData = scores.data;
+    renderSubjects(result.data);
+    // renderTests(result.data, scores.data);
   } catch (err) {
     console.error(err);
   } finally {
     hideLoader();
   }
+}
+
+function onGoBack(){
+  // console.log("Hello");
+  renderSubjects(allTests);
+}
+
+function renderSubjects(testsData){
+  const subjectsCategory = Array.from(new Set(
+    testsData.filter(test => test['is_active'])
+    .map(test => test['subject_category'])));
+  // console.log(subjectsCategory);
+  const container = document.getElementById("testList");
+  container.innerHTML = "";
+  subjectsCategory.forEach((subject) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div onclick="onSubjectSelect('${subject}')" class="card-header test-header">
+        <div class="test-name">${subject}</div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+}
+
+function onSubjectSelect(subject){
+  // console.log(subject);
+  const subjectTests = allTests.filter(test => test['subject_category'] == subject && test['is_active']);
+  // console.log(subjectTests);
+  renderTests(subjectTests, scoresData);
 }
 
 function selectTest(testId){
@@ -43,8 +80,12 @@ function selectTest(testId){
 
 function renderTests(tests, scores) {
   const container = document.getElementById("testList");
-  container.innerHTML = "";
-  allTests = tests;
+  container.innerHTML = `
+    <div onClick="onGoBack()" class="go-back-btn">
+      <span style="font-size:18px;">&#8592;</span>
+      <span>Go Back</span>
+    </div>
+  `;
 
   tests.forEach((test) => {
     const card = document.createElement("div");
