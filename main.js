@@ -12,6 +12,8 @@ function hideLoader() {
 
 let allTests = [];
 let scoresData = [];
+let answersMode = false;
+let subjectTestsGlobal = [];
 
 async function loadTests() {
   try {
@@ -42,7 +44,14 @@ function onGoBack(){
   renderSubjects(allTests);
 }
 
+function showAnswers(){
+  answersMode = !answersMode;
+  // console.log(subjectTestsGlobal);
+  renderTests(subjectTestsGlobal, scoresData);
+}
+
 function renderSubjects(testsData){
+  answersMode = false;
   const subjectsCategory = Array.from(new Set(
     testsData.filter(test => test['is_active'])
     .map(test => test['subject_category'])));
@@ -68,11 +77,13 @@ function onSubjectSelect(subject){
   // console.log(subject);
   const subjectTests = allTests.filter(test => test['subject_category'] == subject && test['is_active']);
   // console.log(subjectTests);
+  subjectTestsGlobal = subjectTests;
   renderTests(subjectTests, scoresData);
 }
 
 function selectTest(testId){
     let testData = allTests.find(test => test.test_id == testId)
+    testData.answersMode = answersMode;
     sessionStorage.setItem('testId', testId);
     sessionStorage.setItem('testData', JSON.stringify(testData));
     window.location.href = `${window.location.href}test.html`
@@ -81,11 +92,19 @@ function selectTest(testId){
 function renderTests(tests, scores) {
   const container = document.getElementById("testList");
   container.innerHTML = `
-    <div onClick="onGoBack()" class="go-back-btn">
-      <span style="font-size:18px;">&#8592;</span>
-      <span>Go Back</span>
+    <div class="top-bar">
+      <div onclick="onGoBack()" class="go-back-btn">
+        <span style="font-size:18px;">&#8592;</span>
+        <span>Go Back</span>
+      </div>
+
+      <label class="switch small">
+        <input type="checkbox" id="toggleSwitch" onchange="showAnswers()">
+        <span class="slider"></span>
+      </label>
     </div>
   `;
+  document.getElementById("toggleSwitch").checked = answersMode;
 
   tests.forEach((test) => {
     const card = document.createElement("div");
@@ -103,12 +122,20 @@ function renderTests(tests, scores) {
 
       const isPass = score.result == 'PASS';
 
+      if(!answersMode){
       scoreHTML = `
-        <div class="score-badge ${isPass ? "pass" : "fail"}">
-          ${isPass ? "PASS" : "FAIL"} 
-          (${score.marks_scored}/${score.total_marks})
-        </div>
-      `;
+          <div class="score-badge ${isPass ? "pass" : "fail"}">
+            ${isPass ? "PASS" : "FAIL"} 
+            (${score.marks_scored}/${score.total_marks})
+          </div>
+        `;
+      } else{
+        scoreHTML = `
+          <div class="score-badge pass">
+            Answers Key
+          </div>
+        `;
+      }
     }
 
     card.innerHTML = `

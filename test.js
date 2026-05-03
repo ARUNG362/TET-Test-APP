@@ -29,7 +29,13 @@ async function loadQuestions() {
     if (result.status === 200 && result.data.length > 0) {
       questions = result.data;
       userAnswers = new Array(questions.length).fill(null);
-      renderQuestion();
+      const answersMode = testData['answersMode'];
+      if(!answersMode){
+        renderQuestion();
+      } else{
+        renderAsnwers();
+      }
+      
     } else {
       alert("No questions found.");
     }
@@ -68,6 +74,32 @@ function renderQuestion() {
 
   updateNavigationButtons();
   document.getElementById("nextBtn").disabled = !userAnswers[currentIndex];
+}
+
+function renderAsnwers(){
+  const incorrectContainer = document.getElementById("incorrectList");
+  incorrectContainer.innerHTML = "";
+  questions.forEach((q, index) => {
+      const correctAnswerIndex = q.answer;
+      
+      const div = document.createElement("div");
+      div.className = "review-item";
+
+      const correctText = q["option_" + correctAnswerIndex];
+    
+      div.innerHTML = `
+        <p><strong>Question ${index + 1}:</strong> ${q.question}</p>
+        <p class="correct-answer">Answer: ${correctText}</p>
+      `;
+
+      incorrectContainer.appendChild(div);
+    
+    }
+  );
+  if (incorrectContainer.children.length > 0) {
+    reviewSection.style.display = "block";
+    document.getElementById("navButtons").innerHTML = "";
+  }
 }
 
 function selectAnswer(optionNumber) {

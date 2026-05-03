@@ -66,26 +66,26 @@ body {
 
 
 .test-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .score-badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .pass {
-  background-color: #e6f7ec;
-  color: #755f50;
+    background-color: #e6f7ec;
+    color: #755f50;
 }
 
 .fail {
-  background-color: #fde8e8;
-  color: #810f07;
+    background-color: #fde8e8;
+    color: #810f07;
 }
 
 /* ===== Spinner Styles ===== */
@@ -109,13 +109,39 @@ body {
     animation: spin 0.8s linear infinite;
 }
 
-.go-back-btn{ 
+
+/* align both in one row */
+.top-bar {
+    display: flex;
+    align-items: center;   
+    justify-content: space-between;        
+}
+
+/* smaller toggle */
+.switch.small {
+    width: 40px;
+    height: 22px;
+}
+
+.switch.small .slider:before {
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+}
+
+/* adjust movement for small size */
+.switch.small input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+.go-back-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 12px;
+    padding: 6px 12px;   
     border-radius: 8px;
-    background-color: #e6f7ec;;
+    background-color: #e6f7ec;
     color: #755f50;
     font-size: 16px;
     font-family: Arial, sans-serif;
@@ -124,8 +150,51 @@ body {
     margin-bottom: 10px;
 }
 
-.go-back-btn:hover{
-    background-color: #3ae676;;
+.go-back-btn:hover {
+    background-color: #3ae676;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+input:checked+.slider {
+    background-color: #4CAF50;
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
 }
 
 @keyframes spin {
